@@ -40,6 +40,27 @@ function connectBit(label, defaultValue) {
     const conn = _Connections[label];
     _sendUpdate(label);
 
+    if (window.location.href.indexOf("dummy=1") >= 0) {
+        // Swap in a dummy implementation for testing
+        conn.state = "Pairing";
+    	conn.log.push('Pairing with dummy device...');
+        _sendUpdate(label);
+
+        // Wait a few seconds before reporting "connected" status
+        window.setTimeout(() => {
+            conn.id = Math.random().toString(36).substring(2, 7);
+            conn.name = "dummy-" + conn.id;
+            conn.state = "Connected";
+            conn.connected = true;
+            conn._characteristic = {
+                writeValue: (val) => null,
+            };
+    		conn.log.push('Connected!');
+            writeValue(label, defaultValue);
+        }, 3000);
+        return;
+    }
+
     if (!navigator.bluetooth) {
         conn.error = 'Bluetooth is not support on this device.';
         conn.log.push(conn.error);
@@ -83,7 +104,6 @@ function connectBit(label, defaultValue) {
         conn.connected = true;
         conn._characteristic = characteristic;
 		conn.log.push('Connected!');
-        //_sendUpdate(label);
         writeValue(label, defaultValue);
 	})
 	.catch(error => {
@@ -96,7 +116,14 @@ function connectBit(label, defaultValue) {
 
 function getConnectionState(label) {
     if (!_Connections[label]) {
-        return null;
+        return {
+            name: null,
+            id: null,
+            log: [],
+            state: "Disconnected",
+            connected: false,
+            error: null,
+        };
     }
     const conn = _Connections[label];
     return {
@@ -115,7 +142,7 @@ function writeValue(label, val) {
     }
 
     const conn = _Connections[label];
-	conn.log.push('Writing val ' + val);
+	conn.log.push('Writing value ' + val);
     _sendUpdate(label);
 
 	var bytesToWrite = Uint8Array.of(0, 2, val);

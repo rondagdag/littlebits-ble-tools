@@ -3,24 +3,20 @@
 	<head>
 		<meta charset="utf-8">
 		<script src="js/littlebits-w30-ble.js"></script>
+		<script src="https://unpkg.com/react@latest/dist/react.js"></script>
+	    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+	    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 	</head>
 	<body>
-        <div style="display: flex">
-            <div>
-                X axis:
-    			<input id="slider1" type="range" min="0" max="255"/>
-    			<button id="button1">Pair...</button>
-        		<textarea id="output1" style="width: 100%; height: 310px"></textarea>
-    		</div>
-            <div>
-                Y Axis:
-    			<input id="slider2" type="range" min="0" max="255"/>
-    			<button id="button2">Pair...</button>
-        		<textarea id="output2" style="width: 100%; height: 310px"></textarea>
-    		</div>
-        </div>
+		<div id="root"></div>
+	    <script type="text/babel" src="js/examples/BLEAdaptor.jsx"></script>
+	    <script type="text/babel" src="js/examples/PairingView.jsx"></script>
+	    <script type="text/babel" src="js/examples/SliderControlView.jsx"></script>
+	    <script type="text/babel" src="js/examples/CarControlView.jsx"></script>
+	    <script type="text/babel" src="js/examples/MainView.jsx"></script>
 
 <script>
+/*
 document.getElementById("button1").addEventListener('click', evt => {
 	event.stopPropagation();
 	event.preventDefault();
@@ -65,6 +61,7 @@ W30Bit.addConnectionUpdateHandler((label, state) => {
     	document.getElementById("output2").value = logs;
     }
 });
+*/
 </script>
 	</body>
 </html>
