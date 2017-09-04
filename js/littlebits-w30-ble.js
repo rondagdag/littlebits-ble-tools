@@ -46,7 +46,7 @@ function connectBit(label, defaultValue) {
     	conn.log.push('Pairing with dummy device...');
         _sendUpdate(label);
 
-        // Wait a few seconds before reporting "connected" status
+        // Wait a second before reporting "connected" status
         window.setTimeout(() => {
             conn.id = Math.random().toString(36).substring(2, 7);
             conn.name = "dummy-" + conn.id;
@@ -57,7 +57,7 @@ function connectBit(label, defaultValue) {
             };
     		conn.log.push('Connected!');
             writeValue(label, defaultValue);
-        }, 3000);
+        }, 1000);
         return;
     }
 
