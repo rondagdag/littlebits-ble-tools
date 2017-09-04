@@ -15,8 +15,8 @@ class CarControlView extends React.Component {
         super(props);
         this.drag = null;
         this.state = {
-            posX: 0,
-            posY: 0,
+            posX: 128,
+            posY: 128,
         };
     }
 
