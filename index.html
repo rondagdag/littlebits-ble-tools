@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="js/littlebits-w30-ble.js"></script>
+	</head>
+	<body>
+		<form>
+			<input id="slider" type="range" min="0" max="255"/>
+			<button>Go!</button>
+		</form>
+		<textarea id="output" style="width: 100%; height: 310px"></textarea>
+
+<script>
+document.querySelector('form').addEventListener('submit', evt => {
+	event.stopPropagation();
+	event.preventDefault();
+
+	document.getElementById("output").value = "";
+	W30Bit.connectBit("PrimaryAxis");
+});
+document.getElementById('slider').addEventListener('input', evt => {
+	const val = evt.target.value;
+	W30Bit.writeValue("PrimaryAxis", val);
+});
+window.addEventListener("deviceorientation", (evt) => {
+	const val = Math.round((evt.gamma + 90) * (255.0/180.0));
+	document.getElementById('slider').value = val;
+	W30Bit.writeValue("PrimaryAxis", val);
+});
+
+W30Bit.addConnectionUpdateHandler((label, state) => {
+	const logs = state.log.map(line => (label + ": " + line)).join("\n");
+	document.getElementById("output").value = logs;
+});
+</script>
+	</body>
+</html>
