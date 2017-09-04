@@ -27,7 +27,7 @@ function _sendUpdate(label) {
     });
 }
 
-function connectBit(label) {
+function connectBit(label, defaultValue) {
     _Connections[label] = {
         name: null,
         id: null,
@@ -80,9 +80,11 @@ function connectBit(label) {
 	})
 	.then(characteristic => {
         conn.state = "Connected";
-        conn.connected = false;
+        conn.connected = true;
         conn._characteristic = characteristic;
-        _sendUpdate(label);
+		conn.log.push('Connected!');
+        //_sendUpdate(label);
+        writeValue(label, defaultValue);
 	})
 	.catch(error => {
         conn.state = "Disconnected";

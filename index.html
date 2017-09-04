@@ -5,33 +5,65 @@
 		<script src="js/littlebits-w30-ble.js"></script>
 	</head>
 	<body>
-		<form>
-			<input id="slider" type="range" min="0" max="255"/>
-			<button>Go!</button>
-		</form>
-		<textarea id="output" style="width: 100%; height: 310px"></textarea>
+        <div style="display: flex">
+            <div>
+                X axis:
+    			<input id="slider1" type="range" min="0" max="255"/>
+    			<button id="button1">Pair...</button>
+        		<textarea id="output1" style="width: 100%; height: 310px"></textarea>
+    		</div>
+            <div>
+                Y Axis:
+    			<input id="slider2" type="range" min="0" max="255"/>
+    			<button id="button2">Pair...</button>
+        		<textarea id="output2" style="width: 100%; height: 310px"></textarea>
+    		</div>
+        </div>
 
 <script>
-document.querySelector('form').addEventListener('submit', evt => {
+document.getElementById("button1").addEventListener('click', evt => {
 	event.stopPropagation();
 	event.preventDefault();
 
-	document.getElementById("output").value = "";
-	W30Bit.connectBit("PrimaryAxis");
+	document.getElementById("output1").value = "";
+	W30Bit.connectBit("X_Axis", 128);
 });
-document.getElementById('slider').addEventListener('input', evt => {
+document.getElementById('slider1').addEventListener('input', evt => {
 	const val = evt.target.value;
-	W30Bit.writeValue("PrimaryAxis", val);
+	W30Bit.writeValue("X_Axis", val);
+});
+document.getElementById("button2").addEventListener('click', evt => {
+	event.stopPropagation();
+	event.preventDefault();
+
+	document.getElementById("output2").value = "";
+	W30Bit.connectBit("Y_Axis", 128);
+});
+document.getElementById('slider2').addEventListener('input', evt => {
+	const val = evt.target.value;
+	W30Bit.writeValue("Y_Axis", val);
 });
 window.addEventListener("deviceorientation", (evt) => {
-	const val = Math.round((evt.gamma + 90) * (255.0/180.0));
-	document.getElementById('slider').value = val;
-	W30Bit.writeValue("PrimaryAxis", val);
+	const xVal = Math.round((evt.gamma + 90) * (255.0/180.0));
+	document.getElementById('slider1').value = xVal;
+
+	const yVal = Math.round((evt.beta + 180) * (255.0/360.0));
+	document.getElementById('slider2').value = yVal;
+
+	W30Bit.writeValue("X_Axis", xVal);
+	W30Bit.writeValue("Y_Axis", yVal);
 });
 
 W30Bit.addConnectionUpdateHandler((label, state) => {
 	const logs = state.log.map(line => (label + ": " + line)).join("\n");
-	document.getElementById("output").value = logs;
+    const buttonLabel = (state.state === "Disconnected") ? "Pair... (Disconnected)" : ("Pair... " + state.name + " (" + state.state + ")");
+    if (label === "X_Axis") {
+        document.getElementById("button1").innerText = buttonLabel;
+    	document.getElementById("output1").value = logs;
+    } else if (label === "Y_Axis") {
+        document.getElementById("button2").innerText = buttonLabel;
+    	document.getElementById("output2").value = logs;
+    }
 });
 </script>
 	</body>
