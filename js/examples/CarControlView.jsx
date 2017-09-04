@@ -6,7 +6,7 @@ function coordToWheels(x, y) {
         // Left
         invY * scaleLeft + (1.0 - scaleLeft) * 128,
         // Right
-        invY * scaleRight + (1.0 - scaleRight) * 128
+        y * scaleRight + (1.0 - scaleRight) * 128
     ];
 }
 
