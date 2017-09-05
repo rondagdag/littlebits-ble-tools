@@ -51,7 +51,7 @@ class PairingView extends React.Component {
         }
 
         return <div style={_styles.pairingView}>
-            <div style={_styles.label}>{"BLE: " + this.props.label}</div>
+            <div style={_styles.label}>{this.props.label}</div>
             <button
                 onClick={() => this.setState({showLog: !this.state.showLog})}
                 style={_styles.logsButton}
@@ -79,7 +79,7 @@ const _lightStyle = {
 const _styles = {
     label: {
         display: "inline-block",
-        fontSize: "18px",
+        fontSize: "16px",
         padding: 8,
         verticalAlign: "middle",
     },
@@ -132,7 +132,7 @@ const _styles = {
         border: "1px solid #ccc",
         borderRadius: 5,
         display: "inline-block",
-        fontSize: "18px",
+        fontSize: "16px",
         margin: "0 8px",
         padding: "6px 12px",
         verticalAlign: "middle",
@@ -144,7 +144,7 @@ const _styles = {
         boxShadow: "rgba(0,0,0,0.4) 3px 3px 6px",
         color: "#fff",
         display: "inline-block",
-        margin: "0 16px 16px 0",
+        margin: "0 8px 16px 8px",
         padding: "4px 30px",
     },
 
