@@ -35,6 +35,8 @@ class CarControlView extends React.Component {
                 origY: evt.clientY,
             };
         }
+        evt.preventDefault();
+        evt.stopPropagation();
     }
 
     handleCircleMove(evt) {
@@ -44,14 +46,18 @@ class CarControlView extends React.Component {
             if (evt.touches !== undefined) {
                 dx = evt.touches[0].clientX - this.drag.origX;
                 dy = evt.touches[0].clientY - this.drag.origY;
+                this.drag = {
+                    origX: evt.touches[0].clientX,
+                    origY: evt.touches[0].clientY,
+                };
             } else {
                 dx = evt.clientX - this.drag.origX;
                 dy = evt.clientY - this.drag.origY;
+                this.drag = {
+                    origX: evt.clientX,
+                    origY: evt.clientY,
+                };
             }
-            this.drag = {
-                origX: evt.clientX,
-                origY: evt.clientY,
-            };
 
             let newX = this.state.posX + (dx / 300.0) * 295;
             let newY = this.state.posY + (dy / 300.0) * 295;
@@ -69,10 +75,14 @@ class CarControlView extends React.Component {
                 posY: newY
             });
         }
+        evt.preventDefault();
+        evt.stopPropagation();
     }
 
     handleCircleUp(evt) {
         this.drag = null;
+        evt.preventDefault();
+        evt.stopPropagation();
     }
 
     render() {

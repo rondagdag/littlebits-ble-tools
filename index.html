@@ -6,9 +6,10 @@
 		<script src="https://unpkg.com/react@latest/dist/react.js"></script>
 	    <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
 	    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
 	<body>
-		<div id="root"></div>
+		<div id="root" style="position: relative; width: 100%; height: 100%; overflow-y: hidden"></div>
 	    <script type="text/babel" src="js/examples/BLEAdaptor.jsx"></script>
 	    <script type="text/babel" src="js/examples/PairingView.jsx"></script>
 	    <script type="text/babel" src="js/examples/SliderControlView.jsx"></script>
@@ -17,28 +18,6 @@
 
 <script>
 /*
-document.getElementById("button1").addEventListener('click', evt => {
-	event.stopPropagation();
-	event.preventDefault();
-
-	document.getElementById("output1").value = "";
-	W30Bit.connectBit("X_Axis", 128);
-});
-document.getElementById('slider1').addEventListener('input', evt => {
-	const val = evt.target.value;
-	W30Bit.writeValue("X_Axis", val);
-});
-document.getElementById("button2").addEventListener('click', evt => {
-	event.stopPropagation();
-	event.preventDefault();
-
-	document.getElementById("output2").value = "";
-	W30Bit.connectBit("Y_Axis", 128);
-});
-document.getElementById('slider2').addEventListener('input', evt => {
-	const val = evt.target.value;
-	W30Bit.writeValue("Y_Axis", val);
-});
 window.addEventListener("deviceorientation", (evt) => {
 	const xVal = Math.round((evt.gamma + 90) * (255.0/180.0));
 	document.getElementById('slider1').value = xVal;
@@ -48,18 +27,6 @@ window.addEventListener("deviceorientation", (evt) => {
 
 	W30Bit.writeValue("X_Axis", xVal);
 	W30Bit.writeValue("Y_Axis", yVal);
-});
-
-W30Bit.addConnectionUpdateHandler((label, state) => {
-	const logs = state.log.map(line => (label + ": " + line)).join("\n");
-    const buttonLabel = (state.state === "Disconnected") ? "Pair... (Disconnected)" : ("Pair... " + state.name + " (" + state.state + ")");
-    if (label === "X_Axis") {
-        document.getElementById("button1").innerText = buttonLabel;
-    	document.getElementById("output1").value = logs;
-    } else if (label === "Y_Axis") {
-        document.getElementById("button2").innerText = buttonLabel;
-    	document.getElementById("output2").value = logs;
-    }
 });
 */
 </script>
