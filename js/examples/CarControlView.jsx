@@ -20,6 +20,26 @@ class CarControlView extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this._orientationHandler = this.handleOrientationChange.bind(this);
+        window.addEventListener("deviceorientation", this._orientationHandler);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("deviceorientation", this._orientationHandler);
+    }
+
+    handleOrientationChange(evt) {
+        if (!this.drag) {
+        	const newX = Math.round((evt.gamma + 90) * (255.0/180.0));
+        	const newY = Math.round((evt.beta + 180) * (255.0/360.0));
+
+            const [newLeft, newRight] = coordToWheels(newX, newY);
+            this.props.connectionActions.Left.writeValue(newLeft);
+            this.props.connectionActions.Right.writeValue(newRight);
+        }
+    }
+
     handleCircleDown(evt) {
         if (evt.touches !== undefined) {
             if (evt.touches.length !== 1) {
