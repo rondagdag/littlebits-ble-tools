@@ -21,16 +21,33 @@ class CarControlView extends React.Component {
     }
 
     handleCircleDown(evt) {
-        this.drag = {
-            origX: evt.clientX,
-            origY: evt.clientY,
-        };
+        if (evt.touches !== undefined) {
+            if (evt.touches.length !== 1) {
+                return;
+            }
+            this.drag = {
+                origX: evt.touches[0].clientX,
+                origY: evt.touches[0].clientY,
+            };
+        } else {
+            this.drag = {
+                origX: evt.clientX,
+                origY: evt.clientY,
+            };
+        }
     }
 
     handleCircleMove(evt) {
         if (this.drag) {
-            const dx = evt.clientX - this.drag.origX;
-            const dy = evt.clientY - this.drag.origY;
+            let dx = 0;
+            let dy = 0;
+            if (evt.touches !== undefined) {
+                dx = evt.touches[0].clientX - this.drag.origX;
+                dy = evt.touches[0].clientY - this.drag.origY;
+            } else {
+                dx = evt.clientX - this.drag.origX;
+                dy = evt.clientY - this.drag.origY;
+            }
             this.drag = {
                 origX: evt.clientX,
                 origY: evt.clientY,
@@ -94,6 +111,8 @@ class CarControlView extends React.Component {
                 onMouseLeave={this.handleCircleUp.bind(this)}
                 onMouseMove={this.handleCircleMove.bind(this)}
                 onMouseUp={this.handleCircleUp.bind(this)}
+                onTouchEnd={this.handleCircleUp.bind(this)}
+                onTouchMove={this.handleCircleMove.bind(this)}
             >
                 <circle cx={128} cy={128} r={128} fill="#ffffff" stroke="#c0c0c0" strokeWidth="1" />
                 <circle cx={128} cy={128} r={64} fill="#ffffff" stroke="#c0c0c0" strokeWidth="1" />
@@ -105,6 +124,7 @@ class CarControlView extends React.Component {
                     cx={this.state.posX}
                     cy={this.state.posY}
                     onMouseDown={this.handleCircleDown.bind(this)}
+                    onTouchStart={this.handleCircleDown.bind(this)}
                     r={20}
                 />
             </svg>
