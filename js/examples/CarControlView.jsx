@@ -4,9 +4,9 @@ function coordToWheels(x, y) {
     const invY = 255 - y;
     return [
         // Left
-        invY * scaleLeft + (1.0 - scaleLeft) * 128,
+        Math.min(Math.max(invY * scaleLeft + (1.0 - scaleLeft) * 128, 0), 255),
         // Right
-        y * scaleRight + (1.0 - scaleRight) * 128
+        Math.min(Math.max(y * scaleRight + (1.0 - scaleRight) * 128, 0), 255)
     ];
 }
 
@@ -31,12 +31,17 @@ class CarControlView extends React.Component {
 
     handleOrientationChange(evt) {
         if (!this.drag) {
-        	const newX = Math.round((evt.gamma + 90) * (255.0/180.0));
-        	const newY = Math.round((evt.beta + 180) * (255.0/360.0));
+            const newX = Math.round(evt.gamma * (256.0/90.0) + 128);
+            const newY = Math.round((evt.beta - 45) * (255.0/90.0) + 128);
 
             const [newLeft, newRight] = coordToWheels(newX, newY);
             this.props.connectionActions.Left.writeValue(newLeft);
             this.props.connectionActions.Right.writeValue(newRight);
+
+            this.setState({
+                posX: newX,
+                posY: newY
+            });
         }
     }
 
