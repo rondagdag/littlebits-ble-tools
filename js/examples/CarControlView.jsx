@@ -1,12 +1,33 @@
+// Maps X/Y values onto wheel velocities
+// This is the grid for the left wheel; the right wheel is flipped and inverted
+const VEL_GRID = [
+    [128, 255, 255],
+    [  0, 128, 255],
+    [  0,   0, 128],
+];
+
+function lerp(x, y) {
+    const xIdx = (x > 1) ? 1 : 0;
+    const yIdx = (y > 1) ? 1 : 0;
+    const xInt = x - xIdx;
+    const yInt = y - yIdx;
+    return (
+        VEL_GRID[yIdx][xIdx] * (1 - xInt) * (1 - yInt) +
+        VEL_GRID[yIdx+1][xIdx] * (1 - xInt) * yInt +
+        VEL_GRID[yIdx][xIdx+1] * xInt * (1 - yInt) +
+        VEL_GRID[yIdx+1][xIdx+1] * xInt * yInt
+    );
+}
+
 function coordToWheels(x, y) {
-    const scaleLeft = Math.min(x / 128, 1);
-    const scaleRight = Math.min(2 - (x / 128), 1);
-    const invY = 255 - y;
+    const scaleCoordX = Math.max(Math.min(x / 128.0, 2.0), 0.0);
+    const scaleCoordY = Math.max(Math.min(y / 128.0, 2.0), 0.0);
+
     return [
         // Left
-        invY * scaleLeft + (1.0 - scaleLeft) * 128,
-        // Right
-        y * scaleRight + (1.0 - scaleRight) * 128
+        lerp(scaleCoordX, scaleCoordY),
+        // Right (flipped X, transposed)
+        lerp(scaleCoordY, 2.0 - scaleCoordX)
     ];
 }
 
