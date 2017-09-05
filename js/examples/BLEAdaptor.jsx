@@ -38,6 +38,9 @@ function BLEAdaptor(WrappedComponent, bleLabel) {
                     W30Bit.connectBit(bleLabel, defaultValue);
                     this.setState({currentValue: defaultValue});
                 },
+                disconnectBit: () => {
+                    W30Bit.disconnectBit(bleLabel);
+                },
                 writeValue: (value) => {
                     W30Bit.writeValue(bleLabel, value);
                     this.setState({currentValue: value});

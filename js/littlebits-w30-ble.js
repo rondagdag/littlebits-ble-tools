@@ -34,6 +34,7 @@ function connectBit(label, defaultValue) {
         log: [],
         state: "Disconnected",
         connected: false,
+        _device: null,
         _characteristic: null,
         error: null,
     };
@@ -52,6 +53,18 @@ function connectBit(label, defaultValue) {
             conn.name = "dummy-" + conn.id;
             conn.state = "Connected";
             conn.connected = true;
+            conn._device = {
+                gatt: {
+                    disconnect: () => {
+                        conn.state = "Disconnected";
+                        conn.connected = false;
+                        conn._device = null;
+                        conn._characteristic = null;
+            			conn.log.push('Disconnected from server.');
+                        _sendUpdate(label);
+                    }
+                }
+            };
             conn._characteristic = {
                 writeValue: (val) => null,
             };
@@ -75,6 +88,7 @@ function connectBit(label, defaultValue) {
 	navigator.bluetooth.requestDevice({
 		filters: [{ services: [SERVICE_ID] }]
 	}).then(device => {
+        conn._device = device;
         conn.name = device.name;
         conn.id = device.id;
         conn.state = "Connecting";
@@ -84,6 +98,7 @@ function connectBit(label, defaultValue) {
 		device.addEventListener('gattserverdisconnected', () => {
             conn.state = "Disconnected";
             conn.connected = false;
+            conn._device = null;
             conn._characteristic = null;
 			conn.log.push('Disconnected from server.');
             _sendUpdate(label);
@@ -109,9 +124,23 @@ function connectBit(label, defaultValue) {
 	.catch(error => {
         conn.state = "Disconnected";
         conn.error = error;
+        if (conn._device) {
+            conn._device.gatt.disconnect();
+        }
+        conn._device = null;
         conn.log.push('Error! ' + error);
         _sendUpdate(label);
 	});
+}
+
+function disconnectBit(label) {
+    if (!_Connections[label]) {
+        return;
+    }
+    const conn = _Connections[label];
+    if (conn._device) {
+        conn._device.gatt.disconnect();
+    }
 }
 
 function getConnectionState(label) {
@@ -162,6 +191,7 @@ function removeConnectionUpdateHandler(handler) {
 
 return {
     connectBit,
+    disconnectBit,
     getConnectionState,
     writeValue,
     addConnectionUpdateHandler,

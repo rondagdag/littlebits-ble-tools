@@ -1,12 +1,15 @@
+window.SliderControlView = (function() {
 class SliderControlView extends React.Component {
     render() {
         return <div>
-            <PairingView
-                actions={this.props.connectionActions.Primary}
-                defaultValue={128}
-                state={this.props.connectionStates.Primary}
-                label="Primary"
-            />
+            <div style={_styles.pairViewWrapper}>
+                <PairingView
+                    actions={this.props.connectionActions.Primary}
+                    defaultValue={128}
+                    state={this.props.connectionStates.Primary}
+                    label="Primary"
+                />
+            </div>
 
 			<input
                 type="range"
@@ -18,5 +21,14 @@ class SliderControlView extends React.Component {
         </div>;
     }
 }
+
+const _styles = {
+    pairViewWrapper: {
+        textAlign: "center",
+    }
+};
+
+return SliderControlView;
+})();
 
 const SliderControlWrapperView = BLEAdaptor(SliderControlView, "Primary");
